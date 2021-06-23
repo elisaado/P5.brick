@@ -11,8 +11,11 @@ speed = 7;
 
 function draw() {
   background(0);
-  if (keyIsDown(LEFT_ARROW)) xpos -= speed;
-  if (keyIsDown(RIGHT_ARROW)) xpos += speed;
+  if (keyIsDown(LEFT_ARROW) && -xpos + hitterWidth / 2 < width / 2)
+    xpos -= speed;
+  if (keyIsDown(RIGHT_ARROW) && xpos + hitterWidth / 2 < width / 2)
+    xpos += speed;
+
   const hitter = rect(
     (width - hitterWidth) / 2 + xpos,
     height - bottomMargin,
