@@ -117,7 +117,7 @@ function colliding(gameObject1, gameObject2) {
   return false;
 }
 
-function applSpeed(gameObject) {
+function applySpeed(gameObject) {
   gameObject.pos.x += gameObject.speed.x;
   gameObject.pos.y += gameObject.speed.y;
 }
