@@ -9,12 +9,7 @@ function setup() {
 
     speed: {
       x: 0,
-      y: 0,
-    },
-
-    acceleration: {
-      x: 0,
-      y: gravity,
+      y: ballSpeed,
     },
 
     hitbox: {
@@ -50,7 +45,7 @@ function setup() {
 const bottomHitterMargin = 50; // margin between the bottom of the sketch and the hitter
 const bottomBallMargin = 200; // margin between bottom of sketch and initial position of the ball
 
-const gravity = 0.1;
+let ballSpeed = 5;
 
 let ball;
 let hitter;
@@ -70,7 +65,7 @@ function draw() {
   if (colliding(hitter, ball)) {
     if (!hitterAndBallCollided) {
       console.log("kanker");
-      for (p in ball.acceleration) {
+      for (p in ball.speed) {
         ball.speed[p] = -ball.speed[p];
       }
     }
@@ -84,7 +79,7 @@ function draw() {
   rect(hitter.pos.x, hitter.pos.y, hitter.width, hitter.height); // hitter
   circle(ball.pos.x, ball.pos.y, ball.diameter); // ball
 
-  applyAccelerationAndSpeed(ball);
+  applySpeed(ball);
 }
 
 function calculateHitbox(gameObject) {
@@ -122,10 +117,7 @@ function colliding(gameObject1, gameObject2) {
   return false;
 }
 
-function applyAccelerationAndSpeed(gameObject) {
-  gameObject.speed.x += gameObject.acceleration.x;
-  gameObject.speed.y += gameObject.acceleration.y;
-
+function applSpeed(gameObject) {
   gameObject.pos.x += gameObject.speed.x;
   gameObject.pos.y += gameObject.speed.y;
 }
