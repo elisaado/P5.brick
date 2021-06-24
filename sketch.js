@@ -43,7 +43,7 @@ let hitter;
 
 function draw() {
   background(0);
-  hitter.pos.x = mouseX - hitter.width / 2;
+  if (mouseX > 0) hitter.pos.x = mouseX - hitter.width / 2;
   rect(hitter.pos.x, hitter.pos.y, hitter.width, hitter.height); // hitter
 
   circle(ball.pos.x, ball.pos.y, ball.diameter); // ball
