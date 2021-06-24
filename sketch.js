@@ -12,7 +12,7 @@ function setup() {
       y: 0,
     },
 
-    velocity: {
+    acceleration: {
       x: 0,
       y: gravity,
     },
@@ -41,13 +41,13 @@ function draw() {
     hitterHeight
   );
 
-  circle(ball.pos.x, ball.pos.y, ball.diameter);
-  applyVelocityAndSpeed(ball);
+  circle(ball.pos.x, ball.pos.y, ball.diameter); // ball
+  applyAccelerationAndSpeed(ball);
 }
 
-function applyVelocityAndSpeed(gameObject) {
-  gameObject.speed.x += gameObject.velocity.x;
-  gameObject.speed.y += gameObject.velocity.y;
+function applyAccelerationAndSpeed(gameObject) {
+  gameObject.speed.x += gameObject.acceleration.x;
+  gameObject.speed.y += gameObject.acceleration.y;
 
   gameObject.pos.x += gameObject.speed.x;
   gameObject.pos.y += gameObject.speed.y;
