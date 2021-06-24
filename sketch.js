@@ -22,21 +22,20 @@ function setup() {
 
   hitter = {
     pos: {
-      x: (width - hitterWidth) / 2,
-      y: height - bottomMargin,
+      x: width / 2,
+      y: height - bottomHitterMargin,
     },
 
     width: 100,
     height: 20,
   };
+
+  hitter.pos.x = (width - hitter.width) / 2;
 }
 
-const hitterWidth = 100; // hitter is the thing you use to hit the ball
-const hitterHeight = 20; // hitter is the thing you use to hit the ball
-const bottomMargin = 50; // margin between the bottom of the sketch and the hitter
+const bottomHitterMargin = 50; // margin between the bottom of the sketch and the hitter
 const bottomBallMargin = 200; // margin between bottom of sketch and initial position of the ball
 
-const speed = 7;
 const gravity = 1;
 
 let ball;
