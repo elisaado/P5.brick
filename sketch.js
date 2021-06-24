@@ -6,6 +6,17 @@ function setup() {
       x: width / 2,
       y: height - bottomBallMargin,
     },
+
+    speed: {
+      x: 0,
+      y: 0,
+    },
+
+    velocity: {
+      x: 0,
+      y: gravity,
+    },
+
     diameter: 50,
   };
 }
@@ -17,7 +28,7 @@ const bottomBallMargin = 200; // margin between bottom of sketch and initial pos
 
 let hitterXpos = 0; // 0 is at the middle
 const speed = 7;
-const gravity = 9.81;
+const gravity = 1;
 let ball;
 
 function draw() {
@@ -31,4 +42,13 @@ function draw() {
   );
 
   circle(ball.pos.x, ball.pos.y, ball.diameter);
+  applyVelocityAndSpeed(ball);
+}
+
+function applyVelocityAndSpeed(gameObject) {
+  gameObject.speed.x += gameObject.velocity.x;
+  gameObject.speed.y += gameObject.velocity.y;
+
+  gameObject.pos.x += gameObject.speed.x;
+  gameObject.pos.y += gameObject.speed.y;
 }
