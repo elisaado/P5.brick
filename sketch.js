@@ -19,6 +19,16 @@ function setup() {
 
     diameter: 50,
   };
+
+  hitter = {
+    pos: {
+      x: (width - hitterWidth) / 2,
+      y: height - bottomMargin,
+    },
+
+    width: 100,
+    height: 20,
+  };
 }
 
 const hitterWidth = 100; // hitter is the thing you use to hit the ball
@@ -26,20 +36,16 @@ const hitterHeight = 20; // hitter is the thing you use to hit the ball
 const bottomMargin = 50; // margin between the bottom of the sketch and the hitter
 const bottomBallMargin = 200; // margin between bottom of sketch and initial position of the ball
 
-let hitterXpos = 0; // 0 is at the middle
 const speed = 7;
 const gravity = 1;
+
 let ball;
+let hitter;
 
 function draw() {
   background(0);
-  hitterXpos = mouseX - width / 2;
-  const hitter = rect(
-    (width - hitterWidth) / 2 + hitterXpos,
-    height - bottomMargin,
-    hitterWidth,
-    hitterHeight
-  );
+  hitter.pos.x = mouseX - hitter.width / 2;
+  rect(hitter.pos.x, hitter.pos.y, hitter.width, hitter.height); // hitter
 
   circle(ball.pos.x, ball.pos.y, ball.diameter); // ball
   applyAccelerationAndSpeed(ball);
