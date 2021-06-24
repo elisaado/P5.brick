@@ -96,7 +96,7 @@ function calculateHitbox(gameObject) {
 function colliding(gameObject1, gameObject2) {
   let hb1 = gameObject1.hitbox;
   let hb2 = gameObject2.hitbox;
-  if (((!hb1 || !hb2) && hb1 !== 0) || hb2 !== 0) return;
+  if ((!hb1 && hb1 !== 0) || (!hb2 && hb2 !== 0)) return;
 
   if (
     hb1.x1 < hb2.x2 &&
