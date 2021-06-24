@@ -62,17 +62,25 @@ function draw() {
   );
   calculateHitbox(hitter);
   if (colliding(hitter, ball)) {
+    ball.speed.x =
+      (((hitter.hitbox.x1 + hitter.hitbox.x2) / 2 - ball.pos.x) /
+        hitter.width) *
+      -10;
     ball.speed.y = -ball.speed.y;
   }
 
-  if (colliding(ball, 1)) {
+  if (colliding(ball, "floor")) {
     throw new Error();
   }
 
-  if (colliding(ball, 0)) {
-    for (p in ball.speed) {
-      ball.speed[p] = -ball.speed[p];
-    }
+  if (colliding(ball, "leftWall")) {
+    ball.speed.x = -ball.speed.x;
+  }
+  if (colliding(ball, "rightWall")) {
+    ball.speed.x = -ball.speed.x;
+  }
+  if (colliding(ball, "ceiling")) {
+    ball.speed.y = -ball.speed.y;
   }
 
   fill(255);
@@ -104,22 +112,22 @@ function calculateHitbox(gameObject) {
 function colliding(gameObject1, gameObject2) {
   let hb1 = gameObject1.hitbox;
   let hb2 = gameObject2.hitbox;
-  if (
-    (!hb1 && gameObject1 !== 0 && gameObject1 !== 1) ||
-    (!hb2 && gameObject2 !== 0 && gameObject2 !== 1)
-  )
-    return;
+  if (!hb1 || (!hb2 && typeof gameObject2 !== "string")) return;
 
-  if (gameObject2 === 0) {
-    // walls and ceiling but not floor
-    if (hb1.x1 <= 0) return true;
+  if (gameObject2 === "ceiling") {
     if (hb1.y1 <= 0) return true;
+    return false;
+  }
+  if (gameObject2 === "leftWall") {
+    if (hb1.x1 <= 0) return true;
+    return false;
+  }
+  if (gameObject2 === "rightWall") {
     if (hb1.x2 >= width) return true;
     return false;
   }
 
-  if (gameObject2 === 1) {
-    // floor
+  if (gameObject2 === "floor") {
     if (hb1.y2 >= height) return true;
     return false;
   }
