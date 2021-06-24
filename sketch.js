@@ -54,6 +54,7 @@ const gravity = 0.1;
 
 let ball;
 let hitter;
+let hitterAndBallCollided = false;
 
 function draw() {
   background(0);
@@ -66,6 +67,17 @@ function draw() {
     ball.hitbox.y2 - ball.hitbox.y1
   );
   calculateHitbox(hitter);
+  if (colliding(hitter, ball)) {
+    if (!hitterAndBallCollided) {
+      console.log("kanker");
+      for (p in ball.acceleration) {
+        ball.speed[p] = -ball.speed[p];
+      }
+    }
+    hitterAndBallCollided = true;
+  } else {
+    hitterAndBallCollided = false;
+  }
 
   fill(255);
   if (mouseX > 0) hitter.pos.x = mouseX - hitter.width / 2;
