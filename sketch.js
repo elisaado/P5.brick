@@ -8,7 +8,7 @@ function setup() {
     },
 
     speed: {
-      x: 0,
+      x: 5,
       y: ballSpeed,
     },
 
@@ -49,7 +49,6 @@ let ballSpeed = 5;
 
 let ball;
 let hitter;
-let hitterAndBallCollided = false;
 
 function draw() {
   background(0);
@@ -63,15 +62,17 @@ function draw() {
   );
   calculateHitbox(hitter);
   if (colliding(hitter, ball)) {
-    if (!hitterAndBallCollided) {
-      console.log("kanker");
-      for (p in ball.speed) {
-        ball.speed[p] = -ball.speed[p];
-      }
+    ball.speed.y = -ball.speed.y;
+  }
+
+  if (colliding(ball, 1)) {
+    throw new Error();
+  }
+
+  if (colliding(ball, 0)) {
+    for (p in ball.speed) {
+      ball.speed[p] = -ball.speed[p];
     }
-    hitterAndBallCollided = true;
-  } else {
-    hitterAndBallCollided = false;
   }
 
   fill(255);
@@ -103,13 +104,31 @@ function calculateHitbox(gameObject) {
 function colliding(gameObject1, gameObject2) {
   let hb1 = gameObject1.hitbox;
   let hb2 = gameObject2.hitbox;
-  if ((!hb1 && hb1 !== 0) || (!hb2 && hb2 !== 0)) return;
+  if (
+    (!hb1 && gameObject1 !== 0 && gameObject1 !== 1) ||
+    (!hb2 && gameObject2 !== 0 && gameObject2 !== 1)
+  )
+    return;
+
+  if (gameObject2 === 0) {
+    // walls and ceiling but not floor
+    if (hb1.x1 <= 0) return true;
+    if (hb1.y1 <= 0) return true;
+    if (hb1.x2 >= width) return true;
+    return false;
+  }
+
+  if (gameObject2 === 1) {
+    // floor
+    if (hb1.y2 >= height) return true;
+    return false;
+  }
 
   if (
-    hb1.x1 < hb2.x2 &&
-    hb1.x2 > hb2.x1 &&
-    hb1.y1 < hb2.y2 &&
-    hb1.y2 > hb2.y1
+    hb1.x1 <= hb2.x2 &&
+    hb1.x2 >= hb2.x1 &&
+    hb1.y1 <= hb2.y2 &&
+    hb1.y2 >= hb2.y1
   ) {
     return true;
   }
