@@ -66,7 +66,14 @@ function draw() {
       (((hitter.hitbox.x1 + hitter.hitbox.x2) / 2 - ball.pos.x) /
         hitter.width) *
       -10;
+    if (ball.speed.x > 4.5) ball.speed.x = 4.5;
+    if (ball.speed.x < -4.5) ball.speed.x = -4.5;
     ball.speed.y = -ball.speed.y;
+
+    totalspeed = Math.sqrt(ball.speed.x ** 2 + ball.speed.y ** 2);
+    if (totalspeed !== ballSpeed) {
+      ball.speed.y = -Math.sqrt(ballSpeed ** 2 - ball.speed.x ** 2);
+    }
   }
 
   if (colliding(ball, "floor")) {
