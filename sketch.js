@@ -93,6 +93,23 @@ function calculateHitbox(gameObject) {
   hb.y2 = gameObject.pos.y + gameObject.height;
 }
 
+function colliding(gameObject1, gameObject2) {
+  let hb1 = gameObject1.hitbox;
+  let hb2 = gameObject2.hitbox;
+  if (((!hb1 || !hb2) && hb1 !== 0) || hb2 !== 0) return;
+
+  if (
+    hb1.x1 < hb2.x2 &&
+    hb1.x2 > hb2.x1 &&
+    hb1.y1 < hb2.y2 &&
+    hb1.y2 > hb2.y1
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 function applyAccelerationAndSpeed(gameObject) {
   gameObject.speed.x += gameObject.acceleration.x;
   gameObject.speed.y += gameObject.acceleration.y;
