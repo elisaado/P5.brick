@@ -1,18 +1,24 @@
 function setup() {
   createCanvas(800, 600);
-  ballPosition = [width / 2, height - bottomBallMargin];
+
+  ball = {
+    pos: {
+      x: width / 2,
+      y: height - bottomBallMargin,
+    },
+    diameter: 50,
+  };
 }
 
 const hitterWidth = 100; // hitter is the thing you use to hit the ball
 const hitterHeight = 20; // hitter is the thing you use to hit the ball
 const bottomMargin = 50; // margin between the bottom of the sketch and the hitter
 const bottomBallMargin = 200; // margin between bottom of sketch and initial position of the ball
-const ballDiameter = 50;
 
 let hitterXpos = 0; // 0 is at the middle
 const speed = 7;
 const gravity = 9.81;
-let ballPosition;
+let ball;
 
 function draw() {
   background(0);
@@ -24,5 +30,5 @@ function draw() {
     hitterHeight
   );
 
-  const ball = circle(ballPosition[0], ballPosition[1], ballDiameter);
+  circle(ball.pos.x, ball.pos.y, ball.diameter);
 }
