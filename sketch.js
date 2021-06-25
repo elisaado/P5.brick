@@ -8,7 +8,7 @@ function setup() {
     },
 
     speed: {
-      x: 5,
+      x: 0,
       y: ballSpeed,
     },
 
@@ -19,7 +19,7 @@ function setup() {
       y2: 0,
     },
 
-    diameter: 50,
+    diameter: 40,
   };
 
   hitter = {
@@ -40,15 +40,56 @@ function setup() {
   };
 
   hitter.pos.x = (width - hitter.width) / 2;
+
+  // do not ask me how this works,
+  // i tried to draw the problem on paper and geogebra but i just couldn't do it right
+  // i want the center brick to always be on the centered horizontally (so if there are 5 bricks
+  // i want brick number 3 to be at x: width/2)
+  // i got it working with trail and error but it still looks janky
+  let brickMargin = Math.abs(width / 2 - brickWidth * bricksPerRow);
+  for (let i = 0; i < brickColumns; i++) {
+    for (let j = 0; j < bricksPerRow; j++) {
+      console.log(j);
+      bricks.push({
+        pos: {
+          x:
+            j * (brickWidth + 40) +
+            50 +
+            brickMargin -
+            bricksPerRow -
+            brickWidth / bricksPerRow,
+          y: ((50 * 3) / brickColumns) * i + 50,
+        },
+
+        width: brickWidth,
+        height: brickHeight,
+
+        hitbox: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 0,
+        },
+      });
+    }
+  }
 }
 
 const bottomHitterMargin = 50; // margin between the bottom of the sketch and the hitter
 const bottomBallMargin = 200; // margin between bottom of sketch and initial position of the ball
+const brickWidth = 50;
+const brickHeight = 20;
 
-let ballSpeed = 5;
+const bricksPerRow = 5; // amount of bricks per row
+const brickColumns = 5; // amount of rows
+
+let ballSpeed = 7;
 
 let ball;
 let hitter;
+let bricks = [];
+
+let score = 0;
 
 function draw() {
   background(0);
@@ -61,6 +102,11 @@ function draw() {
     ball.hitbox.y2 - ball.hitbox.y1
   );
   calculateHitbox(hitter);
+
+  bricks.forEach((brick) => {
+    rect(brick.pos.x, brick.pos.y, brick.width, brick.height);
+  });
+
   if (colliding(hitter, ball)) {
     ball.speed.x =
       (((hitter.hitbox.x1 + hitter.hitbox.x2) / 2 - ball.pos.x) /
