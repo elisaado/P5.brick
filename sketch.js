@@ -6,6 +6,12 @@ document.getElementById("correctBouncing").oninput = (e) => {
 function setup() {
   createCanvas(800, 600);
 
+  generateBall();
+  generateHitter();
+  generateBricks();
+}
+
+function generateBall() {
   ball = {
     pos: {
       x: width / 2,
@@ -26,7 +32,9 @@ function setup() {
 
     diameter: 40,
   };
+}
 
+function generateHitter() {
   hitter = {
     pos: {
       x: width / 2,
@@ -45,7 +53,6 @@ function setup() {
   };
 
   hitter.pos.x = (width - hitter.width) / 2;
-  generateBricks();
 }
 
 function generateBricks() {
@@ -194,6 +201,7 @@ function draw() {
 
   if (bricks.filter((x) => x).length === 0) {
     generateBricks();
+    generateBall();
   }
 
   applySpeed(ball);
