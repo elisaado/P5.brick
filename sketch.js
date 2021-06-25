@@ -1,3 +1,8 @@
+document.getElementById("correctBouncing").oninput = (e) => {
+  correctBouncing = document.getElementById("correctBouncing").checked;
+  console.log(correctBouncing);
+};
+
 function setup() {
   createCanvas(800, 600);
 
@@ -40,7 +45,10 @@ function setup() {
   };
 
   hitter.pos.x = (width - hitter.width) / 2;
+  generateBricks();
+}
 
+function generateBricks() {
   // do not ask me how this works,
   // i tried to draw the problem on paper and geogebra but i just couldn't do it right
   // i want the center brick to always be on the centered horizontally (so if there are 5 bricks
@@ -49,7 +57,6 @@ function setup() {
   let brickMargin = Math.abs(width / 2 - brickWidth * bricksPerRow);
   for (let i = 0; i < brickColumns; i++) {
     for (let j = 0; j < bricksPerRow; j++) {
-      console.log(j);
       bricks.push({
         pos: {
           x:
@@ -70,10 +77,20 @@ function setup() {
           y1: 0,
           y2: 0,
         },
+
+        color: {
+          r: (255 / 5) * (i + 1),
+          g: i % 3 === 0 ? (255 / bricksPerRow) * (i + 1) : 255,
+          b: i % 2 === 0 ? (255 / bricksPerRow) * (i + 1) : 255,
+        },
+
+        score: 5 - i + 1,
       });
     }
   }
 }
+
+let correctBouncing;
 
 const bottomHitterMargin = 50; // margin between the bottom of the sketch and the hitter
 const bottomBallMargin = 200; // margin between bottom of sketch and initial position of the ball
@@ -103,9 +120,32 @@ function draw() {
   );
   calculateHitbox(hitter);
 
-  bricks.forEach((brick) => {
-    rect(brick.pos.x, brick.pos.y, brick.width, brick.height);
-  });
+  for (let brick of bricks) {
+    if (!brick) continue;
+    calculateHitbox(brick);
+    if (colliding(ball, brick)) {
+      if (correctBouncing) {
+        if (ball.pos.x > brick.pos.x && ball.pos.y <= brick.pos.y) {
+          console.log("ceiling");
+          ball.speed.y = -ball.speed.y;
+        } else if (ball.pos.x > brick.pos.x) {
+          console.log("bottom");
+          ball.speed.y = -ball.speed.y;
+        } else if (ball.pos.x < brick.pos.x) {
+          console.log("side");
+          ball.speed.x = -ball.speed.x;
+        } else {
+          ball.speed.x = -ball.speed.x;
+        }
+      } else {
+        ball.speed.x = -ball.speed.x;
+        ball.speed.y = -ball.speed.y;
+      }
+
+      score += brick.score;
+      delete bricks[bricks.indexOf(brick)];
+    }
+  }
 
   if (colliding(hitter, ball)) {
     ball.speed.x =
@@ -123,6 +163,10 @@ function draw() {
   }
 
   if (colliding(ball, "floor")) {
+    background(0);
+    fill(255);
+    textSize(75);
+    text("game over", width / 4, height / 2);
     throw new Error();
   }
 
@@ -140,6 +184,17 @@ function draw() {
   if (mouseX > 0) hitter.pos.x = mouseX - hitter.width / 2;
   rect(hitter.pos.x, hitter.pos.y, hitter.width, hitter.height); // hitter
   circle(ball.pos.x, ball.pos.y, ball.diameter); // ball
+  textSize(32);
+  text(`Score: ${score}`, 20, 50);
+
+  bricks.forEach((brick) => {
+    fill(brick.color.r, brick.color.g, brick.color.b);
+    rect(brick.pos.x, brick.pos.y, brick.width, brick.height);
+  });
+
+  if (bricks.filter((x) => x).length === 0) {
+    generateBricks();
+  }
 
   applySpeed(ball);
 }
